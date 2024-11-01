@@ -31,7 +31,7 @@ function updateTimer() {
     timerElement.textContent = "Time's up!";
     localStorage.clear("answers");
     localStorage.clear("totalSeconds");
-    finishAttempt();
+    finishQuizAttempt();
   }
 }
 
@@ -119,25 +119,31 @@ document.querySelector("#finishAttemptButton").addEventListener("click", () => {
       message:
         "Are you sure you want to end your exam? Your answers will be saved",
       type: "warning",
-      button: `<button onclick="finishAttempt()" class="border-2 border-gray-700 px-4 py-2 dark:text-white rounded dark:hover:bg-gray-900 hover:bg-gray-700">Hello click me</button>`,
+      button: `<button onclick="finishQuizAttempt()" class="border-2 border-gray-700 px-4 py-2 dark:text-white rounded dark:hover:bg-gray-900 hover:bg-gray-700">Hello click me</button>`,
     });
   } else {
-    finishAttempt();
+    finishQuizAttempt();
   }
 });
 
-const finishAttempt = () => {
-  totalSeconds = 0;
-
-  fetch("/finishAttempt", {
+const finishQuizAttempt = () => {
+  fetch(window.location.pathname, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ answers }),
+  })
+    .then((response) => response.json())
+    .then((result) => console.log(result));
+
+  // Reset timer
+  totalSeconds = 1 * 60;
 
   // Alert user to be sure
-  console.log("Attempt Finished");
+  showFullscreenAlert({
+    title: "Quiz finished",
+    message: "Your answers have been saved",
+    type: "success",
+  });
 };
 
 const setAnswerdQuestionNumber = (questionId, add = true) => {
@@ -160,7 +166,7 @@ const populateAnswers = () => {
       setAnswerdQuestionNumber(answer.questionId, true);
 
       // reselect options
-      document.querySelector(`#${answer.optionId}`).checked = true;
+      document.getElementById(`${answer.optionId}`).checked = true;
     });
   }
 };

@@ -1,10 +1,12 @@
 const router = require("express").Router();
 
+router.use(require("../addDummyDataToDb"));
 router.use("/quiz", require("./quiz"));
+router.use("/auth", require("./auth"));
 
 // Home
 router.get("/", (req, res) => {
-  res.render("home");
+  res.redirect("/auth/login");
 });
 
 // 404
