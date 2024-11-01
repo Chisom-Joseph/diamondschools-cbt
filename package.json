@@ -1,0 +1,36 @@
+{
+  "name": "diamondschools-cbt",
+  "version": "1.0.0",
+  "description": "A fully functional cbt application for Diamond Schools",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev:tailwind": "tailwindcss -i ./public/css/style.css -o ./public/dist/output.css --watch",
+    "dev:server": "nodemon server.js",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:tailwind\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chisom-Joseph/diamondschools-cbt.git"
+  },
+  "keywords": [
+    "Diamond",
+    "Schools"
+  ],
+  "author": "Chisom Joseph Njoku",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chisom-Joseph/diamondschools-cbt/issues"
+  },
+  "homepage": "https://github.com/Chisom-Joseph/diamondschools-cbt#readme",
+  "dependencies": {
+    "bootstrap-icons": "^1.11.3",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "flowbite": "^2.5.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "tailwindcss": "^3.4.14"
+  }
+}
