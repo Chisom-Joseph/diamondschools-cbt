@@ -1,12 +1,13 @@
 const router = require("express").Router();
 
+router.use(require("../middlewares/loginVerifire"));
 router.use(require("../addDummyDataToDb"));
 router.use("/quiz", require("./quiz"));
 router.use("/auth", require("./auth"));
 
 // Home
 router.get("/", (req, res) => {
-  res.redirect("/auth/login");
+  res.redirect("/quiz/quiz-details");
 });
 
 // 404

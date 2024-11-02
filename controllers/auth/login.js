@@ -1,19 +1,12 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const loginSchema = require("../../validation/login.schema");
 
 const { Student } = require("../../models");
 
 module.exports = async (req, res) => {
   try {
-    const {
-      username,
-      firstName,
-      middleName,
-      lastName,
-      registrationNumber,
-      level,
-      password,
-    } = req.body;
+    const { registrationNumber, password, rememberMe } = req.body;
 
     console.log(req.body);
 
@@ -25,45 +18,70 @@ module.exports = async (req, res) => {
       return res.status(400).render("auth/login", {
         error: true,
         message: studentValid.error.details[0].message,
-        levels: await require("../../controllers/getLevels")(),
         form: req.body,
       });
 
-    // Check if username already exists
-    const student = await Student.findOne({ where: { username } });
-    if (student) {
+    // Check if student exists
+    const student = await Student.findOne({ where: { registrationNumber } });
+    if (!student) {
       return res.status(400).render("auth/login", {
         error: true,
-        message: "Username already exists",
-        levels: await require("../../controllers/getLevels")(),
+        message: "Invalid Registration Number or Password",
         form: req.body,
       });
     }
 
-    // Create student
-    const salt = await bcrypt.genSalt(parseInt(process.env.PASSWORD_SALT));
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // Verify password
+    const passwordMatch = await bcrypt.compare(password, student.password);
+    if (!passwordMatch) {
+      return res.status(400).render("auth/login", {
+        error: true,
+        message: "Invalid Registration Number or Password",
+        form: req.body,
+      });
+    }
 
-    const newStudent = await Student.create({
+    let expires =
+      rememberMe === "on"
+        ? new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+        : new Date(Date.now() + 2 * 60 * 60 * 1000);
+    let expiresIn =
+      rememberMe === "on" ? 3 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000;
+    const {
+      id: studentId,
       username,
       firstName,
       middleName,
       lastName,
-      registrationNumber,
-      LevelId: level,
-      password: hashedPassword,
+      level,
+      email,
+    } = student.dataValues;
+
+    const token = jwt.sign({ studentId }, process.env.S_TOKEN_SECRET, {
+      expiresIn,
     });
+    res.cookie("sToken", token, { expires, path: "/" });
 
-    console.log(newStudent);
+    req.session.cookie.maxAge = expiresIn;
+    req.session.student = {
+      id: studentId,
+      username,
+      firstName,
+      middleName,
+      lastName,
+      registrationNumber: student.registrationNumber,
+      level: await require("../../helpers/getLevel")(level),
+      email,
+      password,
+    };
+    req.session.student = student;
 
-    // Login student
-    res.redirect("/auth/login");
+    res.redirect("/auth/exam-info");
   } catch (error) {
     console.log(error);
-    res.render("auth/register", {
+    res.render("auth/login", {
       error: true,
       message: "Something went wrong",
-      levels: await require("../../controllers/getLevels")(),
       form: req.body,
     });
   }

@@ -2,7 +2,10 @@ const router = require("express").Router();
 
 // Login route
 router.get("/login", (req, res) => {
-  res.render("auth/login");
+  res.render("auth/login", {
+    error: false,
+    form: [],
+  });
 });
 router.post("/login", require("../controllers/auth/login"));
 
@@ -11,7 +14,7 @@ router.get("/register", async (req, res) => {
   res.render("auth/register", {
     error: false,
     form: {},
-    levels: await require("../controllers/getLevels")(),
+    levels: await require("../helpers/getLevels")(),
   });
 });
 router.post("/register", require("../controllers/auth/register"));

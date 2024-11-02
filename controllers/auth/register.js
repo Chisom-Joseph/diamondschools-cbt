@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
       return res.status(400).render("auth/register", {
         error: true,
         message: studentValid.error.details[0].message,
-        levels: await require("../../controllers/getLevels")(),
+        levels: await require("../../helpers/getLevels")(),
         form: req.body,
       });
 
@@ -35,7 +35,7 @@ module.exports = async (req, res) => {
       return res.status(400).render("auth/register", {
         error: true,
         message: "Username already exists",
-        levels: await require("../../controllers/getLevels")(),
+        levels: await require("../../helpers/getLevels")(),
         form: req.body,
       });
     }
@@ -54,16 +54,13 @@ module.exports = async (req, res) => {
       password: hashedPassword,
     });
 
-    console.log(newStudent);
-
-    // Login student
     res.redirect("/auth/login");
   } catch (error) {
     console.log(error);
     res.render("auth/register", {
       error: true,
       message: "Something went wrong",
-      levels: await require("../../controllers/getLevels")(),
+      levels: await require("../../helpers/getLevels")(),
       form: req.body,
     });
   }
