@@ -6,109 +6,161 @@ const subjects = [
   // Jss1
   {
     name: "Mathematics",
-    LevelId: "a11eb269-6915-41e7-8eeb-36bf8013d4ac",
+    LevelId: "cc976931-00f6-47c7-94e1-55cee94e801e",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Social Studies",
-    LevelId: "a11eb269-6915-41e7-8eeb-36bf8013d4ac",
+    LevelId: "cc976931-00f6-47c7-94e1-55cee94e801e",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "English",
-    LevelId: "a11eb269-6915-41e7-8eeb-36bf8013d4ac",
+    LevelId: "cc976931-00f6-47c7-94e1-55cee94e801e",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Literature",
-    LevelId: "a11eb269-6915-41e7-8eeb-36bf8013d4ac",
+    LevelId: "cc976931-00f6-47c7-94e1-55cee94e801e",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
 
   // Jss2
   {
     name: "Mathematics",
-    LevelId: "a787a67b-1a82-417a-8218-b6f1ece81c3c",
+    LevelId: "c0e39c0b-456c-4e2c-b8f6-80f36dc51f88",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Social Studies",
-    LevelId: "a787a67b-1a82-417a-8218-b6f1ece81c3c",
+    LevelId: "c0e39c0b-456c-4e2c-b8f6-80f36dc51f88",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "English",
-    LevelId: "a787a67b-1a82-417a-8218-b6f1ece81c3c",
+    LevelId: "c0e39c0b-456c-4e2c-b8f6-80f36dc51f88",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Literature",
-    LevelId: "a787a67b-1a82-417a-8218-b6f1ece81c3c",
+    LevelId: "c0e39c0b-456c-4e2c-b8f6-80f36dc51f88",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
 
   // Jss3
   {
     name: "Mathematics",
-    LevelId: "e6eb3748-319a-48d6-9b18-a8119bb6367d",
+    LevelId: "d7bd9e07-981c-4952-b091-26fd80f0fca6",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Social Studies",
-    LevelId: "e6eb3748-319a-48d6-9b18-a8119bb6367d",
+    LevelId: "d7bd9e07-981c-4952-b091-26fd80f0fca6",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "English",
-    LevelId: "e6eb3748-319a-48d6-9b18-a8119bb6367d",
+    LevelId: "d7bd9e07-981c-4952-b091-26fd80f0fca6",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Literature",
-    LevelId: "e6eb3748-319a-48d6-9b18-a8119bb6367d",
+    LevelId: "d7bd9e07-981c-4952-b091-26fd80f0fca6",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
 
   // Sss1
   {
     name: "Mathematics",
-    LevelId: "1a15091f-793a-46ee-bcb4-25a1e708bc9a",
+    LevelId: "169b558a-2ef4-4701-bc8f-888dc054616a",
+    active: true,
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Biology",
-    LevelId: "1a15091f-793a-46ee-bcb4-25a1e708bc9a",
+    LevelId: "169b558a-2ef4-4701-bc8f-888dc054616a",
+    active: true,
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "English",
-    LevelId: "1a15091f-793a-46ee-bcb4-25a1e708bc9a",
+    LevelId: "169b558a-2ef4-4701-bc8f-888dc054616a",
+    active: true,
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Government",
-    LevelId: "1a15091f-793a-46ee-bcb4-25a1e708bc9a",
+    LevelId: "169b558a-2ef4-4701-bc8f-888dc054616a",
+    active: true,
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
 
   // Sss2
   {
     name: "Mathematics",
     LevelId: "df798ff4-e894-4835-9e68-91ffdd8534a2",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Biology",
     LevelId: "df798ff4-e894-4835-9e68-91ffdd8534a2",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "English",
     LevelId: "df798ff4-e894-4835-9e68-91ffdd8534a2",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Government",
     LevelId: "df798ff4-e894-4835-9e68-91ffdd8534a2",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
 
   // Sss3
   {
     name: "Mathematics",
-    LevelId: "28741eeb-d1e1-41cd-b0d3-f650560f2a49",
+    LevelId: "9cc0b15c-866a-4e0b-9eae-78291fa4d43f",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Biology",
-    LevelId: "28741eeb-d1e1-41cd-b0d3-f650560f2a49",
+    LevelId: "9cc0b15c-866a-4e0b-9eae-78291fa4d43f",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "English",
-    LevelId: "28741eeb-d1e1-41cd-b0d3-f650560f2a49",
+    LevelId: "9cc0b15c-866a-4e0b-9eae-78291fa4d43f",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
   {
     name: "Government",
-    LevelId: "28741eeb-d1e1-41cd-b0d3-f650560f2a49",
+    LevelId: "9cc0b15c-866a-4e0b-9eae-78291fa4d43f",
+    instructions: "Atempt All questions in this subject",
+    duration: 30,
   },
 ];
 
@@ -120,8 +172,9 @@ module.exports = async (req, res, next) => {
       Level.create({ name });
     });
 
+  // Add subjects
   const subjectsFromDb = await Subject.findAll();
-  if (subjectsFromDb.length <= 0)
+  if (levelsFromDb.length > 0 && subjectsFromDb.length <= 0)
     subjects.forEach((subject) => {
       Subject.create(subject);
     });

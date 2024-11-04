@@ -76,7 +76,7 @@ module.exports = async (req, res) => {
     };
     req.session.student = student;
 
-    res.redirect("/auth/exam-info");
+    res.redirect("/quiz/exam-details");
   } catch (error) {
     console.log(error);
     res.render("auth/login", {

@@ -2,8 +2,8 @@ const jwt = require("jsonwebtoken");
 
 module.exports = async (req, res, next) => {
   try {
-    console.log(req.originalUrl);
     const token = req.cookies.sToken;
+
     const isAuthRoute = ["/auth/login", "/auth/register"].includes(
       req.originalUrl
     );
@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
 
     const decodedToken = jwt.verify(token, process.env.S_TOKEN_SECRET);
 
-    if (!req.session.student) {
+    if (!req.session.student && decodedToken) {
       req.session.student = req.student =
         await require("../helpers/getStudent")(decodedToken.studentId);
     }

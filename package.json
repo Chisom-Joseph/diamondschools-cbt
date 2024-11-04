@@ -35,6 +35,7 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "memorystore": "^1.6.7",
+    "moment": "^2.30.1",
     "mysql2": "^3.11.3",
     "sequelize": "^6.37.5"
   },

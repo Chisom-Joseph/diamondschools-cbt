@@ -1,29 +1,52 @@
-const quizQuestions = require("../helpers/getQuizQuestions")();
+const { AttemptedSubject, Question, Option } = require("../models");
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
+  const totalQuestions = await Question.count({
+    where: { SubjectId: req.params.subjectId },
+  });
+  console.log(`Total Questions: ${totalQuestions}`);
   const userAnswers = req.body.answers;
   let correctCount = 0;
 
   //   Check if answer is correct
-  userAnswers.forEach((userAnswer) => {
-    // Get current question
-    const currentQuestion = quizQuestions.find(
-      (question) => question.id === userAnswer.questionId
-    );
+  await Promise.all(
+    userAnswers.map(async (userAnswer) => {
+      const currentOption = await Option.findOne({
+        where: { id: userAnswer.optionId },
+      });
 
-    // Check if answer is correct
-    const correctOption = currentQuestion.options.find((option) => {
-      return option.id === userAnswer.optionId && option.correct;
-    });
+      // Check if answer is correct
+      if (currentOption && currentOption.dataValues.correct) correctCount++;
+    })
+  );
 
-    // Update correct count
-    if (correctOption) {
-      correctCount++;
-    }
+  // Check if attempted subject exists
+  const attemptedSubject = await AttemptedSubject.findOne({
+    where: {
+      SubjectId: req.subject.id,
+      StudentId: req.session.student.id,
+    },
+  });
+  console.log(attemptedSubject);
+  if (attemptedSubject) {
+    return res.status(400).send("Subject has already been attempted by you");
+  }
+
+  // Update AttemptedSubjects
+  const updatedAttemptedSubjects = await AttemptedSubject.create({
+    StudentId: req.session.student.id,
+    SubjectId: req.subject.id,
+    correctCount,
+    totalQuestions,
+    scorePercentage: (correctCount / totalQuestions) * 100,
+    totalAnswered: userAnswers.length,
   });
 
   // Update attempted subjects
-  console.log(correctCount);
+  console.log(`Correct count = ${correctCount}`);
+  // console.log(updatedAttemptedSubjects);
+
   // Save answers
-  res.json({ success: true });
+  req.session.showAfterExamPage = true;
+  res.json({ success: true, redirect: "/quiz/after-exam" });
 };

@@ -7,6 +7,7 @@ const AttemptedSubject = require("./AttemptedSubject");
 const Subject = require("./Subject");
 const Question = require("./Question");
 const Option = require("./Option");
+const OptionNames = require("./OptionNames");
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
@@ -31,6 +32,7 @@ db.AttemptedSubject = AttemptedSubject(sequelize, DataTypes);
 db.Subject = Subject(sequelize, DataTypes);
 db.Question = Question(sequelize, DataTypes);
 db.Option = Option(sequelize, DataTypes);
+db.OptionNames = OptionNames(sequelize, DataTypes);
 
 // Associations
 db.Student.belongsTo(db.Level);
@@ -41,6 +43,9 @@ db.Student.hasMany(db.AttemptedSubject);
 
 db.Subject.belongsTo(db.Level);
 db.Level.hasMany(db.Subject);
+
+db.AttemptedSubject.belongsTo(db.Subject);
+db.Subject.hasMany(db.AttemptedSubject);
 
 db.Question.belongsTo(db.Subject);
 db.Subject.hasMany(db.Question);

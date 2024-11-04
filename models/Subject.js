@@ -16,6 +16,21 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
+    instructions: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    duration: {
+      type: DataTypes.FLOAT,
+      defaultValue: 30,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
     active: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

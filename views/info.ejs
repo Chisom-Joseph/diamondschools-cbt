@@ -1,0 +1,16 @@
+<%- include("./partials/header.ejs") %>
+<main>
+  <section>
+    <div class="text-center py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6 grid place-content-center">
+      <div class="max-w-screen-md mb-8 lg:mb-16">
+        <h1 class="text-7xl font-extrabold mb-10 tracking-tight text-gray-900 dark:text-white">Opps!</h1>
+        <div class="bg-gray-950 dark:bg-gray-800/50 backdrop-blur-lg rounded-lg p-4">
+          <h2 class="text-xl tracking-tight font-extrabold text-gray-300 dark:text-white"><%= title || "404" %></h2>
+          <p class="sm:text-xl text-white dark:text-gray-400"><%= message %></p>
+          <a href="/" class="button mt-5 inline-block bg-gray-800 hover:bg-gray-900 dark:bg-white dark:text-gray-800">Go Home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include("./partials/footer.ejs") %>

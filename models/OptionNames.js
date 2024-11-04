@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Question = sequelize.define("Question", {
+  const OptionNames = sequelize.define("OptionNames", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -16,21 +16,6 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        notEmpty: false,
-      },
-    },
-    date: {
-      type: DataTypes.STRING,
-      defaultValue: Date.now(),
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
   });
-  return Question;
+  return OptionNames;
 };

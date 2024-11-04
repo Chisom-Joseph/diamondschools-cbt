@@ -15,7 +15,7 @@
 
       <div class="grid grid-cols-5 w-full gap-2">
         <% if(quizQuestions) { %>
-        <% quizQuestions.map(({id: questionId}, questionIndex) => { %>
+        <% quizQuestions.map(({question: {id: questionId} }, questionIndex) => { %>
         <a href="#<%- questionId %>" class="<%- questionId %> questionNumber flex items-center justify-center text-gray-600 dark:text-gray-300 rounded border-[1px] border-gray-500"><%- ++questionIndex %></a>
         <% }) %>
         <% } %>

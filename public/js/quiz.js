@@ -132,11 +132,22 @@ const finishQuizAttempt = () => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ answers }),
   })
-    .then((response) => response.json())
-    .then((result) => console.log(result));
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((result) => {
+      console.log(result);
+      if (result.redirect) {
+        window.location.replace(result.redirect);
+      }
+    })
+    .catch((error) => console.error("Error:", error));
 
-  // Reset timer
-  totalSeconds = 1 * 60;
+  localStorage.clear("answers");
+  localStorage.clear("totalSeconds");
 
   // Alert user to be sure
   showFullscreenAlert({

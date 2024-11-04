@@ -1,17 +1,35 @@
 const router = require("express").Router();
 
-router.get("/quiz-details", (req, res) => {
-  res.render("quiz/quizDetails");
+router.get("/exam-details", async (req, res) => {
+  console.log(req.session.student.LevelId);
+  res.render("quiz/examDetails", {
+    subjects: await require("../helpers/getSubjectsByLevel")(
+      req.session.student.LevelId
+    ),
+  });
+});
+
+router.get("/after-exam", async (req, res) => {
+  if (!req.session.showAfterExamPage)
+    return res.render("error", {
+      title: "Access Denied",
+      message: "Access Denied",
+    });
+  res.render("quiz/afterQuiz");
+  req.session.showAfterExamPage = false;
+  req.session.save();
 });
 
 router.get(
   "/:subjectId",
   require("../middlewares/verifySubject"),
-  (req, res) => {
+  async (req, res) => {
     console.log(req.subject);
     res.render("quiz/quiz", {
-      quizOptionNames: require("../helpers/getQuizOptionNames")(),
-      quizQuestions: require("../helpers/getQuizQuestions")(),
+      quizOptionNames: await require("../helpers/getQuizOptionNames")(),
+      quizQuestions: await require("../helpers/getQuizQuestions")(
+        req.params.subjectId
+      ),
       subject: req.subject,
     });
   }
