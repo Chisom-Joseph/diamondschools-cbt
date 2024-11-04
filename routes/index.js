@@ -1,7 +1,6 @@
 const router = require("express").Router();
 
 router.use(require("../middlewares/loginVerifire"));
-// router.use(require("../addDummyDataToDb"));
 
 router.use("/quiz", require("./quiz"));
 router.use("/auth", require("./auth"));
