@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const loginSchema = require("../../validation/login.schema");
 
@@ -6,7 +5,7 @@ const { Student } = require("../../models");
 
 module.exports = async (req, res) => {
   try {
-    const { registrationNumber, password, rememberMe } = req.body;
+    const { registrationNumber, rememberMe } = req.body;
 
     console.log(req.body);
 
@@ -26,17 +25,7 @@ module.exports = async (req, res) => {
     if (!student) {
       return res.status(400).render("auth/login", {
         error: true,
-        message: "Invalid Registration Number or Password",
-        form: req.body,
-      });
-    }
-
-    // Verify password
-    const passwordMatch = await bcrypt.compare(password, student.password);
-    if (!passwordMatch) {
-      return res.status(400).render("auth/login", {
-        error: true,
-        message: "Invalid Registration Number or Password",
+        message: "Invalid Registration Number",
         form: req.body,
       });
     }
@@ -72,7 +61,6 @@ module.exports = async (req, res) => {
       registrationNumber: student.registrationNumber,
       level: await require("../../helpers/getLevel")(level),
       email,
-      password,
     };
     req.session.student = student;
 

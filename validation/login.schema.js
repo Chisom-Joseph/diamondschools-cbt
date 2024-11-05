@@ -6,5 +6,4 @@ module.exports = Joi.object({
     .max(32)
     .required()
     .label("Registration Number"),
-  password: Joi.string().min(6).max(1000).required().label("Password"),
 });
