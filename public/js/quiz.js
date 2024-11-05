@@ -117,9 +117,9 @@ document.querySelector("#finishAttemptButton").addEventListener("click", () => {
     showFullscreenAlert({
       title: "End exam",
       message:
-        "Are you sure you want to end your exam? Your answers will be saved",
+        "Are you sure you want to end your exam? Your answers will be submitted.",
       type: "warning",
-      button: `<button onclick="finishQuizAttempt()" class="border-2 border-gray-700 px-4 py-2 dark:text-white rounded dark:hover:bg-gray-900 hover:bg-gray-700">Hello click me</button>`,
+      button: `<button onclick="finishQuizAttempt()" class="border-2 border-gray-700 px-4 py-2 dark:text-white rounded dark:hover:bg-gray-900 hover:bg-gray-700">Submit Answers</button>`,
     });
   } else {
     finishQuizAttempt();
@@ -151,8 +151,8 @@ const finishQuizAttempt = () => {
 
   // Alert user to be sure
   showFullscreenAlert({
-    title: "Quiz finished",
-    message: "Your answers have been saved",
+    title: "Exam Ended",
+    message: "Your exam has been submitted successfully",
     type: "success",
   });
 };

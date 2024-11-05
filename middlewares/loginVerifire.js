@@ -8,15 +8,18 @@ module.exports = async (req, res, next) => {
       req.originalUrl
     );
 
-    if (!token) {
-      return isAuthRoute ? next() : res.redirect("/auth/login");
-    }
+    if (!token) return isAuthRoute ? next() : res.redirect("/auth/login");
 
     const decodedToken = jwt.verify(token, process.env.S_TOKEN_SECRET);
 
     if (!req.session.student && decodedToken) {
-      req.session.student = req.student =
-        await require("../helpers/getStudent")(decodedToken.studentId);
+      const student = await require("../helpers/getStudent")(
+        decodedToken.studentId
+      );
+
+      if (!student) return isAuthRoute ? next() : res.redirect("/auth/login");
+
+      req.session.student = req.student = student;
     }
 
     if (isAuthRoute) {

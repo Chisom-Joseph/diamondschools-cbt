@@ -5,13 +5,15 @@ module.exports = async (id) => {
     if (!id) return res.status(404).send("Error");
     const student = await Student.findOne({ id });
 
-    if (!student) return res.clearCookie("sToken").redirect("/auth/login");
+    if (!student) return null;
+
     student.dataValues.level = await require("./getLevel")(
       student.dataValues.levelId
     );
-    return student ? student.dataValues : {};
+
+    return student ? student.dataValues : null;
   } catch (error) {
     console.log(error);
-    return {};
+    return null;
   }
 };

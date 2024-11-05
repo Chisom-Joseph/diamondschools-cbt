@@ -1,11 +1,11 @@
 const router = require("express").Router();
 
 router.get("/exam-details", async (req, res) => {
-  console.log(req.session.student.LevelId);
   res.render("quiz/examDetails", {
     subjects: await require("../helpers/getSubjectsByLevel")(
       req.session.student.LevelId
     ),
+    student: req.session.student,
   });
 });
 
