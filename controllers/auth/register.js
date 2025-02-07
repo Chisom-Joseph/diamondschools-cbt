@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
       firstName,
       middleName,
       lastName,
-      registrationNumber,
+      examinationNumber,
       level,
       password,
     } = req.body;
@@ -49,7 +49,7 @@ module.exports = async (req, res) => {
       firstName,
       middleName,
       lastName,
-      registrationNumber,
+      examinationNumber,
       LevelId: level,
       password: hashedPassword,
     });
