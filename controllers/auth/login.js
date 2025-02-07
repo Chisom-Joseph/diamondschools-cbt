@@ -1,31 +1,31 @@
 const jwt = require("jsonwebtoken");
 const loginSchema = require("../../validation/login.schema");
 
-const { Student } = require("../../models");
-
 module.exports = async (req, res) => {
   try {
-    const { registrationNumber, rememberMe } = req.body;
+    const { rememberMe } = req.body;
 
-    console.log(req.body);
-
-    // Validate Student
-    const studentValid = loginSchema.validate(req.body, {
+    // Validate Aspirant
+    const aspirantValid = loginSchema.validate(req.body, {
       errors: { wrap: { label: false } },
     });
-    if (studentValid.error)
+    if (aspirantValid.error)
       return res.status(400).render("auth/login", {
         error: true,
-        message: studentValid.error.details[0].message,
+        message: aspirantValid.error.details[0].message,
         form: req.body,
       });
 
-    // Check if student exists
-    const student = await Student.findOne({ where: { registrationNumber } });
-    if (!student) {
+    // Check if aspirant or student exists
+    const candidate =
+      await require("../../helpers/findStudentOrAspirantByExaminationNumber")(
+        req.body.examinationNumber
+      );
+
+    if (!candidate) {
       return res.status(400).render("auth/login", {
         error: true,
-        message: "Invalid Registration Number",
+        message: "Invalid Login",
         form: req.body,
       });
     }
@@ -37,32 +37,35 @@ module.exports = async (req, res) => {
     let expiresIn =
       rememberMe === "on" ? 3 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000;
     const {
-      id: studentId,
+      id: candidateId,
       username,
       firstName,
       middleName,
       lastName,
-      level,
       email,
-    } = student.dataValues;
+    } = candidate.candidate;
 
-    const token = jwt.sign({ studentId }, process.env.S_TOKEN_SECRET, {
-      expiresIn,
-    });
-    res.cookie("sToken", token, { expires, path: "/" });
+    const token = jwt.sign(
+      { id: candidateId },
+      process.env.CANDIDATE_TOKEN_SECRET,
+      {
+        expiresIn,
+      }
+    );
+    res.cookie("cToken", token, { expires, path: "/" });
 
     req.session.cookie.maxAge = expiresIn;
-    req.session.student = {
-      id: studentId,
+    req.session.candidate = {
+      id: candidateId,
       username,
       firstName,
       middleName,
       lastName,
-      registrationNumber: student.registrationNumber,
-      level: await require("../../helpers/getLevel")(level),
+      examinationNumber: candidate.examinationNumber,
+      class: await require("../../helpers/getClass")(candidate.candidateclass),
       email,
     };
-    req.session.student = student;
+    req.session.candidate = candidate;
 
     res.redirect("/quiz/exam-details");
   } catch (error) {
