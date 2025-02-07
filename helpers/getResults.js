@@ -1,11 +1,11 @@
-const { AttemptedSubject, Subject } = require("../models");
-
-module.exports = async (StudentId) => {
+const { AttemptedSubject, Subject, Aspirant } = require("../models");
+const { Op } = require("sequelize");
+module.exports = async (id) => {
   try {
     const results = [];
 
     const attemptedSubjectFromDb = await AttemptedSubject.findAll({
-      where: { StudentId },
+      where: { [Op.or]: [{ StudentId: id }, { AspirantId: id }] },
       include: [
         {
           model: Subject,
@@ -13,6 +13,8 @@ module.exports = async (StudentId) => {
         },
       ],
     });
+
+    console.log(attemptedSubjectFromDb);
 
     await Promise.all(
       attemptedSubjectFromDb.map(async (attemptedSubject) => {

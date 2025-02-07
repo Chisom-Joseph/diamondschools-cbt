@@ -1,14 +1,16 @@
-const { Subject, Question } = require("../models");
+const { Subject, Question, Option } = require("../models");
 
-module.exports = async (LevelId) => {
+module.exports = async (ClassId) => {
   try {
     const subjects = [];
 
-    if (!LevelId) return subjects;
+    if (!ClassId) return subjects;
 
     const subjectsFromDb = await Subject.findAll({
-      where: { LevelId },
+      where: { ClassId },
     });
+
+    console.log(subjectsFromDb);
 
     if (subjectsFromDb.length > 0) {
       await Promise.all(
@@ -18,6 +20,19 @@ module.exports = async (LevelId) => {
             where: { SubjectId: subject.dataValues.id },
           });
           if (questionCount <= 0) subject.dataValues.active = false;
+
+          // Check if options are available for questions
+          const optionsCount = await Option.count({
+            include: [
+              {
+                model: Question,
+                where: { SubjectId: subject.dataValues.id },
+              },
+            ],
+          });
+
+          console.log(`Options Count: ${optionsCount}`);
+          if (optionsCount <= 0) subject.dataValues.active = false;
 
           console.log(subject.dataValues.active);
           // subject.dataValues.active && subjects.push(subject.dataValues);

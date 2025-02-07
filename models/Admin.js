@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Subject = sequelize.define("Subject", {
+  const Admin = sequelize.define("Admin", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -9,47 +9,51 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    name: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    shortName: {
+    middleName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    instructions: {
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    profileImageUrl: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    duration: {
-      type: DataTypes.FLOAT,
-      defaultValue: 30,
-      allowNull: true,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    active: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    date: {
-      type: DataTypes.STRING,
-      defaultValue: Date.now(),
-      allowNull: false,
       validate: {
         notEmpty: true,
       },
@@ -62,6 +66,14 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
+    lastAccess: {
+      type: DataTypes.STRING,
+      defaultValue: Date.now(),
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   });
-  return Subject;
+  return Admin;
 };

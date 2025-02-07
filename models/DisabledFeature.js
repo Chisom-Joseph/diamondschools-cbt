@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Level = sequelize.define("Level", {
+  const DisabledFeatures = sequelize.define("DisabledFeatures", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -9,14 +9,22 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    name: {
+    featureName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    date: {
+    user: {
+      type: DataTypes.STRING,
+      defaultValue: "all",
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    disabledOn: {
       type: DataTypes.STRING,
       defaultValue: Date.now(),
       allowNull: false,
@@ -25,5 +33,5 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   });
-  return Level;
+  return DisabledFeatures;
 };

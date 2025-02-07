@@ -1,36 +1,48 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = async (req, res, next) => {
+  const token = req?.cookies?.cToken;
+  const authRoutes = ["/auth/login"];
   try {
-    const token = req.cookies.sToken;
+    if (!token && !authRoutes.includes(req.originalUrl)) {
+      res.clearCookie("cToken");
+      return res.redirect("/auth/login");
+    }
 
-    const isAuthRoute = ["/auth/login", "/auth/register"].includes(
-      req.originalUrl
+    if (!token && authRoutes.includes(req.originalUrl)) {
+      next();
+    }
+
+    const tokenVerified = jwt.verify(token, process.env.CANDIDATE_TOKEN_SECRET);
+
+    if (!tokenVerified && authRoutes.includes(req.originalUrl)) {
+      return res.redirect("/auth/login");
+    }
+
+    if (tokenVerified && authRoutes.includes(req.originalUrl)) {
+      return res.redirect("/dashboard");
+    }
+
+    if (!tokenVerified && !authRoutes.includes(req.originalUrl)) {
+      return res.redirect("/auth/login");
+    }
+
+    let candidate = await require("../helpers/findStudentOrAspirant")(
+      tokenVerified.id
     );
 
-    if (!token) return isAuthRoute ? next() : res.redirect("/auth/login");
-
-    const decodedToken = jwt.verify(token, process.env.S_TOKEN_SECRET);
-
-    if (!req.session.student && decodedToken) {
-      const student = await require("../helpers/getStudent")(
-        decodedToken.studentId
-      );
-
-      if (!student) return isAuthRoute ? next() : res.redirect("/auth/login");
-
-      req.session.student = req.student = student;
+    if (Object.keys(candidate).length === 0) {
+      res.clearCookie("cToken");
+      return res.redirect("/auth/login");
     }
 
-    if (isAuthRoute) {
-      return res.redirect("/");
-    }
-
-    next();
+    req.candidate = candidate.candidate;
+    req.isAspirant = candidate.isAspirant;
+    res.locals.candidate = candidate;
+    res.locals.isLoggedin = true;
+    return next();
   } catch (error) {
-    console.log(error);
-    res.status(401).json({
-      error: new Error("Requête invalide !"),
-    });
+    console.error("ERROR VERIFING LOGIN");
+    console.error(error);
   }
 };

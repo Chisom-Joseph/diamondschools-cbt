@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Student = sequelize.define("Student", {
+  const Aspirant = sequelize.define("Aspirant", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    registrationNumber: {
+    examinationNumber: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -59,6 +59,13 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     profileImageUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    paymentProofUrl: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
@@ -109,6 +116,21 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
+    examinationDate: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    isStudent: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        notEmpty: true,
+      },
+      defaultValue: undefined,
+    },
     lastAccess: {
       type: DataTypes.STRING,
       defaultValue: Date.now(),
@@ -118,5 +140,5 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   });
-  return Student;
+  return Aspirant;
 };

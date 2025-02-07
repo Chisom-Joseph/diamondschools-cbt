@@ -3,11 +3,11 @@
   <section>
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="max-w-screen-md mb-8 lg:mb-16">
-        <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Hi, <%= student.firstName %> <%= student.middleName %> <%= student.lastName %></h2>
+        <h2 class="mb-4 text-2xl leading-[-2em] font-bold text-gray-900 dark:text-white">Hi, <%= candidate.firstName %> <%= candidate.middleName %> <%= candidate.lastName %></h2>
         <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Welcome to your exam dashboard</h2>
         <p class="text-gray-500 sm:text-xl dark:text-gray-400">Kindly select a subject to start your exam.</p>
       </div>
-      <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
+      <div class="space-y-8 <%= subjects.length > 0 && "md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12" %>  md:space-y-0">
         <% if(subjects.length > 0) { %>
         <% subjects.forEach(subject => { %>
         <a <% if(subject.active) { %>href="/quiz/<%- subject.id %>" <% } %> class="<%- !subject.active && "opacity-50 cursor-not-allowed pointer-events-all" %> <%- subject.active && "cursor-pointer" %>  border-gray-600 border-[1px] p-7 rounded">
@@ -19,6 +19,9 @@
           </p>
         </a>
         <% }) %>
+        <% } else { %>
+        <p class="text-center font-bold text-gray-500">Opps! No Subjects found</p>
+
         <% } %>
       </div>
     </div>

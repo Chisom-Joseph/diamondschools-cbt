@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Subject = sequelize.define("Subject", {
+  const Guardian = sequelize.define("Guardian", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -9,59 +9,67 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    name: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    shortName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    instructions: {
+    middleName: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        notEmpty: true,
-      },
     },
-    duration: {
-      type: DataTypes.FLOAT,
-      defaultValue: 30,
-      allowNull: true,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    active: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    date: {
+    lastName: {
       type: DataTypes.STRING,
-      defaultValue: Date.now(),
       allowNull: false,
       validate: {
         notEmpty: true,
       },
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: true,
+        isEmail: true,
+      },
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    relationshipToStudent: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    occupation: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     deleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
+      defaultValue: false,
     },
   });
-  return Subject;
+
+  return Guardian;
 };

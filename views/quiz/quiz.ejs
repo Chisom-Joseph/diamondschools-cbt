@@ -7,8 +7,6 @@
   <!-- Sidebar -->
   <%- include("../partials/quizSidebar.ejs") %>
 
-
-
   <main class="p-4 md:ml-64 h-auto pt-20">
     <% if(quizQuestions && quizOptionNames) { %>
     <% quizQuestions.map(({question: {id: questionId, name: questionName, image}, options }, questionIndex) => { %>

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Student = sequelize.define("Student", {
+  const Teacher = sequelize.define("Teacher", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    registrationNumber: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -86,13 +86,6 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    dateOfBirth: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
     blocked: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -118,5 +111,5 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   });
-  return Student;
+  return Teacher;
 };

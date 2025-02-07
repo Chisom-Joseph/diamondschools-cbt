@@ -20,7 +20,7 @@ router.get("/register", async (req, res) => {
 router.post("/register", require("../controllers/auth/register"));
 
 router.get("/logout", (req, res) => {
-  res.clearCookie("sToken", { path: "/" }).redirect("/auth/login");
+  res.clearCookie("cToken", { path: "/" }).redirect("/auth/login");
 });
 
 module.exports = router;

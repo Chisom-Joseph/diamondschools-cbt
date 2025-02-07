@@ -2,10 +2,10 @@ const router = require("express").Router();
 
 router.get("/exam-details", async (req, res) => {
   res.render("quiz/examDetails", {
-    subjects: await require("../helpers/getSubjectsByLevel")(
-      req.session.student.LevelId
+    subjects: await require("../helpers/getSubjectsByClass")(
+      req.candidate.ClassId
     ),
-    student: req.session.student,
+    candidate: req.candidate,
   });
 });
 
@@ -34,7 +34,6 @@ router.get(
     });
   }
 );
-
 router.post(
   "/:subjectId",
   require("../middlewares/verifySubject"),

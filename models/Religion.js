@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const OptionNames = sequelize.define("OptionNames", {
+  const Religion = sequelize.define("Religion", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -16,6 +16,14 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   });
-  return OptionNames;
+  return Religion;
 };

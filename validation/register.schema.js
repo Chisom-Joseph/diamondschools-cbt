@@ -5,7 +5,7 @@ module.exports = Joi.object({
   firstName: Joi.string().min(3).max(32).required().label("First Name"),
   middleName: Joi.string().min(3).max(32).required().label("Middle Name"),
   lastName: Joi.string().min(3).max(32).required().label("Last Name"),
-  registrationNumber: Joi.string()
+  examinationNumber: Joi.string()
     .min(3)
     .max(32)
     .required()

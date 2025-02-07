@@ -25,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
+    correctCount: {
+      type: DataTypes.FLOAT,
+      defaultValue: 0,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
     scorePercentage: {
       type: DataTypes.FLOAT,
       defaultValue: 0,

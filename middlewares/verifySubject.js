@@ -29,12 +29,23 @@ module.exports = async (req, res, next) => {
       });
 
     // Check if subject has attempted
-    const attemptedSubject = await AttemptedSubject.findOne({
-      where: {
-        SubjectId: subjectId,
-        StudentId: req.session.student.id,
-      },
-    });
+    let attemptedSubject;
+    if (req.isAspirant) {
+      attemptedSubject = await AttemptedSubject.findOne({
+        where: {
+          SubjectId: subjectId,
+          AspirantId: req.candidate.id,
+        },
+      });
+    } else {
+      attemptedSubject = await AttemptedSubject.findOne({
+        where: {
+          SubjectId: subjectId,
+          StudentId: req.candidate.id,
+        },
+      });
+    }
+
     if (attemptedSubject) {
       return res.status(400).render("info", {
         title: "Exam Attempted",
