@@ -20,21 +20,32 @@ module.exports = async (req, res) => {
     })
   );
 
+  let attemptedSubject;
   // Check if attempted subject exists
-  const attemptedSubject = await AttemptedSubject.findOne({
-    where: {
-      SubjectId: req.subject.id,
-      StudentId: req.session.student.id,
-    },
-  });
-  console.log(attemptedSubject);
+  if (req.isAspirant) {
+    attemptedSubject = await AttemptedSubject.findOne({
+      where: {
+        SubjectId: req.subject.id,
+        AspirantId: req.candidate.id,
+      },
+    });
+    console.log(attemptedSubject);
+  } else {
+    attemptedSubject = await AttemptedSubject.findOne({
+      where: {
+        SubjectId: req.subject.id,
+        StudentId: req.candidate.id,
+      },
+    });
+    console.log(attemptedSubject);
+  }
   if (attemptedSubject) {
     return res.status(400).send("Subject has already been attempted by you");
   }
 
   // Update AttemptedSubjects
   const updatedAttemptedSubjects = await AttemptedSubject.create({
-    StudentId: req.session.student.id,
+    StudentId: req.candidate.id,
     SubjectId: req.subject.id,
     correctCount,
     totalQuestions,
@@ -47,6 +58,6 @@ module.exports = async (req, res) => {
   // console.log(updatedAttemptedSubjects);
 
   // Save answers
-  req.session.showAfterExamPage = true;
+  req.showAfterExamPage = true;
   res.json({ success: true, redirect: "/quiz/after-exam" });
 };
