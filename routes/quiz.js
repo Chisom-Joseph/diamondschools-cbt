@@ -25,6 +25,7 @@ router.get(
   require("../middlewares/verifySubject"),
   async (req, res) => {
     console.log(req.subject);
+    console.log(await require("../helpers/getQuizOptionNames")());
     res.render("quiz/quiz", {
       quizOptionNames: await require("../helpers/getQuizOptionNames")(),
       quizQuestions: await require("../helpers/getQuizQuestions")(

@@ -8,7 +8,7 @@
   <%- include("../partials/quizSidebar.ejs") %>
 
   <main class="p-4 md:ml-64 h-auto pt-20">
-    <% if(quizQuestions && quizOptionNames) { %>
+    <% if(quizQuestions.length > 0 && quizOptionNames.length > 0) { %>
     <% quizQuestions.map(({question: {id: questionId, name: questionName, image}, options }, questionIndex) => { %>
     <div id="<%- questionId %>" class="quizQuestion scroll-m-20 p-6 border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 mb-7">
       <div class="mb-6 text-gray-700 dark:text-gray-200 flex gap-4 flex-wrap">

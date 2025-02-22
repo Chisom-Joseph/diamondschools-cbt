@@ -1,4 +1,4 @@
-const { Subject, Question, Option } = require("../models");
+const { Subject, Question, Option, Class } = require("../models");
 
 module.exports = async (ClassId) => {
   try {
@@ -7,7 +7,11 @@ module.exports = async (ClassId) => {
     if (!ClassId) return subjects;
 
     const subjectsFromDb = await Subject.findAll({
-      where: { ClassId },
+      include: {
+        model: Class,
+        where: { id: ClassId },
+        through: { attributes: [] },
+      },
     });
 
     console.log(subjectsFromDb);

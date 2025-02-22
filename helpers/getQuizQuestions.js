@@ -1,8 +1,8 @@
-const { Question, Option, Sequelize } = require("../models");
+const { Question, Option } = require("../models");
 
 module.exports = async (SubjectId) => {
   try {
-    const quizQuestions = [];
+    let quizQuestions = [];
 
     // Get questions with options
     const quizQuestionsFromDb = await Question.findAll({
@@ -38,10 +38,12 @@ module.exports = async (SubjectId) => {
     //   ...quizQuestions.map((question) => {
     //     return {
     //       ...question,
-    //       correctOption: question.options.find((option) => option.correct).id
-    //     }
-    //   })
-    // ]
+    //       correctOption: question.options.find((option) => option.correct).id,
+    //     };
+    //   }),
+    // ];
+
+    console.log(quizQuestions);
 
     return quizQuestions;
   } catch (error) {
