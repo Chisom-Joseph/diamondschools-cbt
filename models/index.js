@@ -109,11 +109,17 @@ db.Aspirant.hasMany(db.AttemptedSubject, { onDelete: "CASCADE" });
 db.AttemptedSubject.belongsTo(db.Student, { onDelete: "CASCADE" });
 db.Student.hasMany(db.AttemptedSubject, { onDelete: "CASCADE" });
 
+db.AttemptedSubject.belongsTo(db.Term, { onDelete: "CASCADE" });
+db.Term.hasMany(db.AttemptedSubject, { onDelete: "CASCADE" });
+
 db.Question.belongsTo(db.Subject, { onDelete: "CASCADE" });
 db.Subject.hasMany(db.Question, { onDelete: "CASCADE" });
 
 db.Option.belongsTo(db.Question, { onDelete: "CASCADE" });
 db.Question.hasMany(db.Option, { onDelete: "CASCADE" });
+
+db.Question.belongsTo(db.Term, { onDelete: "CASCADE" });
+db.Term.hasMany(db.Question, { onDelete: "CASCADE" });
 
 db.Student.belongsToMany(db.Notification, {
   through: db.UserNotification,
@@ -152,10 +158,10 @@ db.Student.hasMany(db.Result, {
 });
 
 db.Result.belongsTo(db.Subject, {
-  onDelete: "SET NULL",
+  onDelete: "CASCADE",
 });
 db.Subject.hasMany(db.Result, {
-  onDelete: "SET NULL",
+  onDelete: "CASCADE",
 });
 
 db.Result.belongsTo(db.Term, {

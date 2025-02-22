@@ -1,6 +1,17 @@
 const { AttemptedSubject, Question, Option } = require("../models");
 
 module.exports = async (req, res) => {
+  const questionWithTerm = await Question.findOne({
+    where: { SubjectId: req.params.subjectId },
+    attributes: ["TermId"], // Get only the TermId
+  });
+
+  let TermId = null;
+
+  if (questionWithTerm) {
+    TermId = questionWithTerm.TermId;
+  }
+
   const totalQuestions = await Question.count({
     where: { SubjectId: req.params.subjectId },
   });
@@ -45,12 +56,15 @@ module.exports = async (req, res) => {
 
   // Update AttemptedSubjects
   const updatedAttemptedSubjects = await AttemptedSubject.create({
-    StudentId: req.candidate.id,
+    ...(req.isAspirant
+      ? { AspirantId: req.candidate.id }
+      : { StudentId: req.candidate.id }),
     SubjectId: req.subject.id,
     correctCount,
     totalQuestions,
     scorePercentage: (correctCount / totalQuestions) * 100,
     totalAnswered: userAnswers.length,
+    TermId,
   });
 
   // Update attempted subjects
