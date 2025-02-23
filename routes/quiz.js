@@ -11,9 +11,14 @@ router.get("/exam-details", async (req, res) => {
 
 router.get("/after-exam", async (req, res) => {
   if (!req.session.showAfterExamPage)
-    return res.render("error", {
-      title: "Access Denied",
-      message: "Access Denied",
+    return res.render("message", {
+      title: "Exam completed",
+      message: {
+        title: "Exam completed",
+        body: "Exam completed and submitted successfully",
+        button: "Go Home",
+        buttonLink: "/",
+      },
     });
   res.render("quiz/afterQuiz");
   req.session.showAfterExamPage = false;
@@ -24,14 +29,13 @@ router.get(
   "/:subjectId",
   require("../middlewares/verifySubject"),
   async (req, res) => {
-    console.log(req.subject);
-    console.log(await require("../helpers/getQuizOptionNames")());
     res.render("quiz/quiz", {
       quizOptionNames: await require("../helpers/getQuizOptionNames")(),
       quizQuestions: await require("../helpers/getQuizQuestions")(
         req.params.subjectId
       ),
       subject: req.subject,
+      examSettings: (await require("../helpers/getExamSettings")()) || "",
     });
   }
 );

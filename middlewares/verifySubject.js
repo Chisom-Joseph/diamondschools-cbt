@@ -6,13 +6,29 @@ module.exports = async (req, res, next) => {
 
     // Check if subject id is provided
     if (!subjectId) {
-      return res.status(400).send("Subject id is required");
+      return res.status(400).render("message", {
+        title: "Invalid subject",
+        message: {
+          title: "Invalid subject",
+          body: "Subject not found",
+          button: "Go Home",
+          buttonLink: "/",
+        },
+      });
     }
 
     // Check if subject exists
     const subjectFromDb = await Subject.findOne({ where: { id: subjectId } });
     if (subjectFromDb === null) {
-      return res.status(404).send("Subject not found");
+      return res.status(400).render("message", {
+        title: "Invalid subject",
+        message: {
+          title: "Invalid subject",
+          body: "Subject not found",
+          button: "Go Home",
+          buttonLink: "/",
+        },
+      });
     }
 
     // Check if questions are available for subject
@@ -23,9 +39,14 @@ module.exports = async (req, res, next) => {
 
     // Check if subject is active
     if (!subjectFromDb.dataValues.active)
-      return res.status(400).render("error", {
+      return res.render("message", {
         title: "Subject Unavailable",
-        message: "Subject has been disabled by admin",
+        message: {
+          title: "Subject Unavailable",
+          body: "Subject has been disabled by admin",
+          button: "Go Home",
+          buttonLink: "/",
+        },
       });
 
     // Check if subject has attempted
@@ -47,9 +68,14 @@ module.exports = async (req, res, next) => {
     }
 
     if (attemptedSubject) {
-      return res.status(400).render("info", {
+      res.render("message", {
         title: "Exam Attempted",
-        message: "Exam has already been taken by you",
+        message: {
+          title: "Exam Attempted",
+          body: "Exam has already been taken by you",
+          button: "Go Home",
+          buttonLink: "/",
+        },
       });
     }
 

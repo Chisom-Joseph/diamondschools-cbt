@@ -1,0 +1,15 @@
+<%- include("./partials/header.ejs") %>
+<main>
+  <section>
+    <div class="text-center py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6 absolute top-[55%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+      <div class="max-w-screen-md mb-8 lg:mb-16">
+        <h1 class="text-7xl font-extrabold mb-5 tracking-tight text-gray-900 dark:text-white"><%= message.title %></h1>
+        <p class="text-xl tracking-tight"><%= message.body %></p>
+        <% if(message.button) { %>
+        <a href="<%= message.buttonLink || "/" %>" class="button mt-5 inline-block bg-gray-800 hover:bg-gray-900 dark:bg-white dark:text-gray-800"><%= message.button %></a>
+        <% } %>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include("./partials/footer.ejs") %>

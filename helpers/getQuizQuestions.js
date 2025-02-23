@@ -4,6 +4,8 @@ module.exports = async (SubjectId) => {
   try {
     let quizQuestions = [];
 
+    const examSettings = await require("../helpers/getExamSettings")();
+
     // Get questions with options
     const quizQuestionsFromDb = await Question.findAll({
       where: { SubjectId },
@@ -22,32 +24,42 @@ module.exports = async (SubjectId) => {
       });
     });
 
-    // console.log(quizQuestions);
-    console.log(quizQuestionsFromDb);
-    console.log(quizQuestionsFromDb.length);
+    // Shuffle questions if enabled
+    if (examSettings?.shuffleQuestions) {
+      for (let i = quizQuestions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [quizQuestions[i], quizQuestions[j]] = [
+          quizQuestions[j],
+          quizQuestions[i],
+        ];
+      }
+    }
 
-    // Shuffle questions
-    // for (let i = quizQuestions.length - 1; i > 0; i--) {
-    //   const j = Math.floor(Math.random() * (i + 1));
-    //   [quizQuestions[i], quizQuestions[j]] = [quizQuestions[j], quizQuestions[i]];
-    // }
+    // Shuffle options if enabled
+    if (examSettings?.shuffleOptions) {
+      quizQuestions = quizQuestions.map((question) => {
+        const shuffledOptions = [...question.options];
 
-    // Add correct options
-    // quizQuestions = [
-    //   ...quizQuestions,
-    //   ...quizQuestions.map((question) => {
-    //     return {
-    //       ...question,
-    //       correctOption: question.options.find((option) => option.correct).id,
-    //     };
-    //   }),
-    // ];
+        for (let i = shuffledOptions.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffledOptions[i], shuffledOptions[j]] = [
+            shuffledOptions[j],
+            shuffledOptions[i],
+          ];
+        }
 
-    console.log(quizQuestions);
+        return {
+          ...question,
+          options: shuffledOptions,
+          correctOption: shuffledOptions.find((option) => option.correct).id, // Maintain correct option
+        };
+      });
+    }
 
     return quizQuestions;
   } catch (error) {
-    console.log(error);
+    console.error("ERROR GETTING QUIZ QUESTIONS");
+    console.error(error);
     return [];
   }
 };

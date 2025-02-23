@@ -1,7 +1,8 @@
 const answers = localStorage.getItem("answers")
   ? JSON.parse(localStorage.getItem("answers"))
   : [];
-let totalSeconds = localStorage.getItem("totalSeconds") || 1 * 60;
+let totalSeconds =
+  localStorage.getItem("totalSeconds") || initialExamTimerFrom || 30000;
 const timerElement = document.getElementById("quizTimer");
 let quizActive = false;
 

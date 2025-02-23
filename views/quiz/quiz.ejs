@@ -41,5 +41,7 @@
     <% } %>
   </main>
 </div>
-
+<script>
+  const initialExamTimerFrom = Number('<%= examSettings.duration %>') || 30000;
+</script>
 <%- include("../partials/footer.ejs") %>

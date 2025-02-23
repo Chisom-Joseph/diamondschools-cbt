@@ -3,6 +3,8 @@ const { Subject, Question, Option, Class } = require("../models");
 module.exports = async (ClassId) => {
   try {
     const subjects = [];
+    const examSettings = await require("../helpers/getExamSettings")();
+    console.log(examSettings);
 
     if (!ClassId) return subjects;
 
@@ -24,6 +26,8 @@ module.exports = async (ClassId) => {
             where: { SubjectId: subject.dataValues.id },
           });
           if (questionCount <= 0) subject.dataValues.active = false;
+          if (questionCount < examSettings.questionLimit)
+            subject.dataValues.active = false;
 
           // Check if options are available for questions
           const optionsCount = await Option.count({

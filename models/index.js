@@ -21,15 +21,13 @@ const AcademicYear = require("./AcademicYear");
 const Term = require("./Term");
 const Result = require("./Result");
 const ClassSubject = require("./ClassSubject");
+const ExamSettings = require("./ExamSettings");
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
   dialectOptions: {
     connectTimeout: 100000,
-  },
-  define: {
-    timestamps: false,
   },
   polli: {
     min: dbConfig.poll.min,
@@ -65,6 +63,7 @@ db.AcademicYear = AcademicYear(sequelize, DataTypes);
 db.Term = Term(sequelize, DataTypes);
 db.Result = Result(sequelize, DataTypes);
 db.ClassSubject = ClassSubject(sequelize, DataTypes);
+db.ExamSettings = ExamSettings(sequelize, DataTypes);
 
 // Relations
 db.Student.belongsTo(db.Class, { onDelete: "SET NULL" });

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 router.use(require("../middlewares/loginVerifire"));
-// router.use(require("../middlewares/featureFlags"));
+router.use(require("../middlewares/verifyAccess"));
 
 router.use("/quiz", require("./quiz"));
 router.use("/auth", require("./auth"));
