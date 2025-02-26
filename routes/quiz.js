@@ -2,9 +2,10 @@ const router = require("express").Router();
 
 router.get("/exam-details", async (req, res) => {
   res.render("quiz/examDetails", {
-    subjects: await require("../helpers/getSubjectsByClass")(
-      req.candidate.ClassId
-    ),
+    subjects: await require("../helpers/getSubjectsByClass")({
+      ClassId: req.candidate.ClassId,
+      For: req.isAspirant ? "aspirant" : "student",
+    }),
     candidate: req.candidate,
   });
 });
@@ -31,9 +32,11 @@ router.get(
   async (req, res) => {
     res.render("quiz/quiz", {
       quizOptionNames: await require("../helpers/getQuizOptionNames")(),
-      quizQuestions: await require("../helpers/getQuizQuestions")(
-        req.params.subjectId
-      ),
+      quizQuestions: await require("../helpers/getQuizQuestions")({
+        SubjectId: req.params.subjectId,
+        For: req.isAspirant ? "aspirant" : "student",
+        ClassId: req.candidate.ClassId,
+      }),
       subject: req.subject,
       examSettings: (await require("../helpers/getExamSettings")()) || "",
     });

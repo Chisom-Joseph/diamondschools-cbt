@@ -1,6 +1,7 @@
-const { Question, Option } = require("../models");
+const { Question, Option, Class, Sequelize } = require("../models");
+const { Op } = Sequelize;
 
-module.exports = async (SubjectId) => {
+module.exports = async ({ SubjectId, ClassId, For }) => {
   try {
     let quizQuestions = [];
 
@@ -8,7 +9,7 @@ module.exports = async (SubjectId) => {
 
     // Get questions with options
     const quizQuestionsFromDb = await Question.findAll({
-      where: { SubjectId },
+      where: { SubjectId, ClassId, for: { [Op.or]: ["all", For] } },
       include: [
         {
           model: Option,

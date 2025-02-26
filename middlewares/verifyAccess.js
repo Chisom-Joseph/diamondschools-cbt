@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
     });
 
     if (!examSettings) {
-      res.render("message", {
+      return res.render("message", {
         title: "Hold on",
         message: {
           title: "Opps!",

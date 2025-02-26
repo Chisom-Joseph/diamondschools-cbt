@@ -1,6 +1,7 @@
-const { Subject, Question, Option, Class } = require("../models");
+const { Subject, Question, Option, Class, Sequelize } = require("../models");
+const { Op } = Sequelize;
 
-module.exports = async (ClassId) => {
+module.exports = async ({ ClassId, For }) => {
   try {
     const subjects = [];
     const examSettings = await require("../helpers/getExamSettings")();
@@ -23,8 +24,13 @@ module.exports = async (ClassId) => {
         subjectsFromDb.map(async (subject) => {
           // Check if questions are available for subject
           const questionCount = await Question.count({
-            where: { SubjectId: subject.dataValues.id },
+            where: {
+              SubjectId: subject.dataValues.id,
+              ClassId,
+              for: { [Op.or]: ["all", For] },
+            },
           });
+
           if (questionCount <= 0) subject.dataValues.active = false;
           if (questionCount < examSettings.questionLimit)
             subject.dataValues.active = false;
