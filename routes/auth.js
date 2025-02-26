@@ -10,7 +10,10 @@ router.get("/login", (req, res) => {
 router.post("/login", require("../controllers/auth/login"));
 
 router.get("/logout", (req, res) => {
-  res.clearCookie("cToken", { path: "/" }).redirect("/auth/login");
+  res
+    .clearCookie("cToken", { path: "/" })
+    .cookie("clearLocalStorage", "true", { maxAge: 5000, httpOnly: false })
+    .redirect("/auth/login");
 });
 
 module.exports = router;
