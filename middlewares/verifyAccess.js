@@ -1,22 +1,21 @@
 const moment = require("moment");
 const { ExamSettings } = require("../models");
+const formatDate = require("../helpers/formatDate");
+const formatTime = require("../helpers/formatTime");
 
 module.exports = async (req, res, next) => {
   try {
     const isAspirant = req.isAspirant;
-
     const examSettings = await ExamSettings.findOne({
       where: { uniqueKey: 1 },
     });
 
     if (!examSettings) {
-      return res.render("message", {
-        title: "Hold on",
-        message: {
-          title: "Opps!",
-          body: "Something went worng, please contact the admin",
-        },
-      });
+      return renderMessage(
+        res,
+        "Oops!",
+        "Something went wrong, please contact the admin"
+      );
     }
 
     const currentDate = moment().format("YYYY-MM-DD");
@@ -24,96 +23,42 @@ module.exports = async (req, res, next) => {
 
     const { startDate, endDate, startTime, aspirantExaminationDate } =
       examSettings;
+    const examStartDate = isAspirant ? aspirantExaminationDate : startDate;
 
-    // Check if exam is scheduled for a future date
-    if (isAspirant) {
-      if (currentDate < aspirantExaminationDate) {
-        return res.render("message", {
-          title: "Too early",
-          message: {
-            title: "Too early",
-            body: `Exam is scheduled to start on: ${moment(
-              aspirantExaminationDate,
-              "YYYY-MM-DD"
-            ).format("dddd, Do MMMM")}`,
-          },
-        });
-      }
+    // Exam not started yet
+    if (currentDate < examStartDate) {
+      return renderMessage(
+        res,
+        "Too early",
+        `Exam is scheduled to start on: ${formatDate(examStartDate)}`
+      );
+    }
 
-      // Check if current time is before start time on the start date
-      if (currentDate === aspirantExaminationDate && currentTime < startTime) {
-        return res.render("message", {
-          title: "Too early",
-          message: {
-            title: "Too early",
-            body: `Exam is scheduled to start by: ${moment(
-              startTime,
-              "HH:mm"
-            ).format("hh:mm A")}`,
-          },
-        });
-      }
+    // Exam starts today but time is not reached
+    if (currentDate === examStartDate && currentTime < startTime) {
+      return renderMessage(
+        res,
+        "Too early",
+        `Exam is scheduled to start by: ${formatTime(startTime)}`
+      );
+    }
 
-      // Check if exam has already ended
-      if (currentDate > endDate) {
-        return res.render("message", {
-          title: "Too late",
-          message: {
-            title: "Too late",
-            body: "Exams have ended",
-          },
-        });
-      }
-    } else {
-      if (currentDate < startDate) {
-        return res.render("message", {
-          title: "Too early",
-          message: {
-            title: "Too early",
-            body: `Exam is scheduled to start on: ${moment(
-              startDate,
-              "YYYY-MM-DD"
-            ).format("dddd, Do MMMM")}`,
-          },
-        });
-      }
-
-      // Check if current time is before start time on the start date
-      if (currentDate === startDate && currentTime < startTime) {
-        return res.render("message", {
-          title: "Too early",
-          message: {
-            title: "Too early",
-            body: `Exam is scheduled to start by: ${moment(
-              startTime,
-              "HH:mm"
-            ).format("hh:mm A")}`,
-          },
-        });
-      }
-
-      // Check if exam has already ended
-      if (currentDate > endDate) {
-        return res.render("message", {
-          title: "Too late",
-          message: {
-            title: "Too late",
-            body: "Exams have ended",
-          },
-        });
-      }
+    // Exam has already ended
+    if (currentDate > endDate) {
+      return renderMessage(res, "Too late", "Exams have ended");
     }
 
     next();
   } catch (error) {
-    console.error("ERROR VERIFYING ACCESS");
-    console.error(error);
-    res.render("message", {
-      title: "Hold on",
-      message: {
-        title: "Opps!",
-        body: "Something went worng",
-      },
-    });
+    console.error("ERROR VERIFYING ACCESS", error);
+    return renderMessage(res, "Oops!", "Something went wrong");
   }
+};
+
+// Helper function to render messages
+const renderMessage = (res, title, body) => {
+  return res.render("message", {
+    title,
+    message: { title, body },
+  });
 };
