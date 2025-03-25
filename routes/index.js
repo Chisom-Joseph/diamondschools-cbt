@@ -1,9 +1,8 @@
 const router = require("express").Router();
 
 router.use(require("../middlewares/loginVerifire"));
-router.use(require("../middlewares/verifyAccess"));
-
-router.use("/quiz", require("./quiz"));
+const verifyAccess = require("../middlewares/verifyAccess");
+router.use("/quiz", verifyAccess, require("./quiz"));
 router.use("/auth", require("./auth"));
 
 // Home
@@ -12,27 +11,10 @@ router.get("/", (req, res) => {
 });
 
 // Temp admin route
-router.get("/admin/result", async (req, res) => {
+router.get("/admin/result", verifyAccess, async (req, res) => {
   res.render("tempResult", {
     results: await require("../helpers/getResults")(req.candidate.id),
   });
-});
-
-router.get("/addLevel", async (req, res) => {
-  try {
-    const { Level } = require("../models");
-
-    const level = {
-      name: "SSS1",
-    };
-
-    const newLevel = await Level.create(level);
-    console.log(newLevel);
-    return res.json(newLevel);
-  } catch (error) {
-    console.log("ERROR ADDING LEVEL");
-    console.log(error);
-  }
 });
 
 // 404
