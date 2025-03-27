@@ -2,10 +2,24 @@ const moment = require("moment");
 const { ExamSettings } = require("../models");
 const formatDate = require("../helpers/formatDate");
 const formatTime = require("../helpers/formatTime");
+const checkFeatureAccess = require("../helpers/checkFeatureAccess");
 
 module.exports = async (req, res, next) => {
   try {
     const isAspirant = req.isAspirant;
+    const isFeatureEnabled = await checkFeatureAccess(
+      "cbt-portal",
+      `${isAspirant ? "aspirant" : "student"}`,
+      null
+    );
+    if (!isFeatureEnabled) {
+      return renderMessage(
+        res,
+        "Page Disabled",
+        "You cannot access this feature at this time because it has been disabled by the admins."
+      );
+    }
+
     const examSettings = await ExamSettings.findOne({
       where: { uniqueKey: 1 },
     });
