@@ -1,5 +1,6 @@
 const router = require("express").Router();
 
+router.use(require("../middlewares/setSiteSettings"));
 router.use(require("../middlewares/loginVerifire"));
 const verifyAccess = require("../middlewares/verifyAccess");
 router.use("/quiz", verifyAccess, require("./quiz"));
@@ -14,6 +15,7 @@ router.get("/", (req, res) => {
 router.get("/admin/result", verifyAccess, async (req, res) => {
   res.render("tempResult", {
     results: await require("../helpers/getResults")(req.candidate.id),
+    siteSettings: req.siteSettings,
   });
 });
 
@@ -22,6 +24,7 @@ router.get("*", (req, res) => {
   res.status(404).render("error", {
     title: "Page not found",
     message: "Recourse not found",
+    siteSettings: req.siteSettings,
   });
 });
 
