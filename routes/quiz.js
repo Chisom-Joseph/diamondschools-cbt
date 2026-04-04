@@ -7,6 +7,7 @@ router.get("/exam-details", async (req, res) => {
       For: req.isAspirant ? "aspirant" : "student",
     }),
     candidate: req.candidate,
+    siteSettings: req.siteSettings,
   });
 });
 
@@ -20,8 +21,11 @@ router.get("/after-exam", async (req, res) => {
         button: "Go Home",
         buttonLink: "/",
       },
+      siteSettings: req.siteSettings,
     });
-  res.render("quiz/afterQuiz");
+  res.render("quiz/afterQuiz", {
+    siteSettings: req.siteSettings,
+  });
   req.session.showAfterExamPage = false;
   req.session.save();
 });
@@ -39,6 +43,7 @@ router.get(
       }),
       subject: req.subject,
       examSettings: (await require("../helpers/getExamSettings")()) || "",
+      siteSettings: req.siteSettings,
     });
   }
 );

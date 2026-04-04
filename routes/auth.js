@@ -5,6 +5,7 @@ router.get("/login", (req, res) => {
   res.render("auth/login", {
     error: false,
     form: [],
+    siteSettings: req.siteSettings,
   });
 });
 router.post("/login", require("../controllers/auth/login"));
