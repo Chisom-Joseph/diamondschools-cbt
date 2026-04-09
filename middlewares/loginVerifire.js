@@ -10,7 +10,12 @@ module.exports = async (req, res, next) => {
     }
 
     if (!token && authRoutes.includes(req.originalUrl)) {
-      next();
+      return next();
+    }
+
+    if (!token) {
+      res.clearCookie("cToken");
+      return res.redirect("/auth/login");
     }
 
     const tokenVerified = jwt.verify(token, process.env.CANDIDATE_TOKEN_SECRET);
@@ -44,5 +49,7 @@ module.exports = async (req, res, next) => {
   } catch (error) {
     console.error("ERROR VERIFING LOGIN");
     console.error(error);
+    res.clearCookie("cToken");
+    return res.redirect("/auth/login");
   }
 };

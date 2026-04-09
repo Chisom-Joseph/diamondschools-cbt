@@ -14,6 +14,7 @@ module.exports = async (req, res) => {
         error: true,
         message: aspirantValid.error.details[0].message,
         form: req.body,
+        siteSettings: req.siteSettings,
       });
 
     // Check if aspirant or student exists
@@ -27,6 +28,7 @@ module.exports = async (req, res) => {
         error: true,
         message: "Invalid Login",
         form: req.body,
+        siteSettings: req.siteSettings,
       });
     }
 
@@ -74,6 +76,7 @@ module.exports = async (req, res) => {
       error: true,
       message: "Something went wrong",
       form: req.body,
+      siteSettings: req.siteSettings,
     });
   }
 };
