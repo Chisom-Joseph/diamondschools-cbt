@@ -30,19 +30,23 @@ router.get("/notifications", async (req, res) => {
 
   let notifications = [];
   let unseenBroadcasts = [];
-  let candidateId, fkField;
+  let candidateId, fkField, candidateCreatedAt;
 
   try {
     candidateId = req.candidate.id;
+    candidateCreatedAt = req.candidate.createdAt;
     const isAspirant = req.isAspirant;
 
     const audienceType = isAspirant ? 'all-aspirants' : 'all-students';
     fkField = isAspirant ? 'AspirantId' : 'StudentId';
     const Model = isAspirant ? Aspirant : Student;
 
-    // 1. Get broadcast notifications for this audience type
+    // 1. Get broadcast notifications for this audience type created after candidate registration
     const broadcasts = await Notification.findAll({
-      where: { targetAudience: audienceType },
+      where: {
+        targetAudience: audienceType,
+        createdAt: { [require("sequelize").Op.gte]: candidateCreatedAt },
+      },
       order: [['createdAt', 'DESC']],
       raw: true,
     });
@@ -61,7 +65,9 @@ router.get("/notifications", async (req, res) => {
       ],
     });
 
-    const joinedNotifications = userWithNotifications?.Notifications || [];
+    const joinedNotifications = (userWithNotifications?.Notifications || []).filter(
+      n => new Date(n.createdAt) >= new Date(candidateCreatedAt)
+    );
     const joinedIds = new Set(joinedNotifications.map(n => n.id));
 
     // 3. Merge: broadcasts not yet in joined set are unseen
