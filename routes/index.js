@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 router.use(require("../middlewares/setSiteSettings"));
 router.use(require("../middlewares/loginVerifire"));
+router.use(require("../middlewares/setUnreadNotificationCount"));
 const verifyAccess = require("../middlewares/verifyAccess");
 router.use("/quiz", verifyAccess, require("./quiz"));
 router.use("/auth", require("./auth"));
