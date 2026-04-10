@@ -14,6 +14,7 @@ module.exports = async (req, res, next) => {
           button: "Go Home",
           buttonLink: "/",
         },
+        siteSettings: req.siteSettings,
       });
     }
 
@@ -28,6 +29,7 @@ module.exports = async (req, res, next) => {
           button: "Go Home",
           buttonLink: "/",
         },
+        siteSettings: req.siteSettings,
       });
     }
 
@@ -47,6 +49,7 @@ module.exports = async (req, res, next) => {
           button: "Go Home",
           buttonLink: "/",
         },
+        siteSettings: req.siteSettings,
       });
 
     // Check if subject has attempted
@@ -68,7 +71,7 @@ module.exports = async (req, res, next) => {
     }
 
     if (attemptedSubject) {
-      res.render("message", {
+      return res.render("message", {
         title: "Exam Attempted",
         message: {
           title: "Exam Attempted",
@@ -76,6 +79,7 @@ module.exports = async (req, res, next) => {
           button: "Go Home",
           buttonLink: "/",
         },
+        siteSettings: req.siteSettings,
       });
     }
 
