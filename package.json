@@ -7,7 +7,13 @@
     "start": "node server.js",
     "dev:tailwind": "tailwindcss -i ./public/css/style.css -o ./public/dist/output.css --watch",
     "dev:server": "nodemon server.js",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:tailwind\""
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:tailwind\"",
+    "db:create": "sequelize-cli db:create",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo",
+    "db:migrate:status": "sequelize-cli db:migrate:status",
+    "db:seed:all": "sequelize-cli db:seed:all",
+    "db:seed:undo": "sequelize-cli db:seed:undo"
   },
   "repository": {
     "type": "git",
