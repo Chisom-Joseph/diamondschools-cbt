@@ -20,39 +20,63 @@ module.exports = async ({ ClassId, For }) => {
     console.log(subjectsFromDb);
 
     if (subjectsFromDb.length > 0) {
-      await Promise.all(
-        subjectsFromDb.map(async (subject) => {
-          // Check if questions are available for subject
-          const questionCount = await Question.count({
-            where: {
-              SubjectId: subject.dataValues.id,
-              ClassId,
-              for: { [Op.or]: ["all", For] },
-            },
-          });
+      const subjectIds = subjectsFromDb.map(s => s.id);
 
-          if (questionCount <= 0) subject.dataValues.active = false;
-          if (questionCount < examSettings.questionLimit)
-            subject.dataValues.active = false;
+      // Fetch all question counts for these subjects in a single query
+      const questionCounts = await Question.findAll({
+        attributes: [
+          "SubjectId",
+          [Sequelize.fn("COUNT", Sequelize.col("id")), "count"],
+        ],
+        where: {
+          SubjectId: { [Op.in]: subjectIds },
+          ClassId,
+          for: { [Op.or]: ["all", For] },
+        },
+        group: ["SubjectId"],
+        raw: true,
+      });
 
-          // Check if options are available for questions
-          const optionsCount = await Option.count({
-            include: [
-              {
-                model: Question,
-                where: { SubjectId: subject.dataValues.id },
-              },
-            ],
-          });
+      const questionCountsMap = {};
+      questionCounts.forEach(qc => {
+        questionCountsMap[qc.SubjectId] = parseInt(qc.count) || 0;
+      });
 
-          console.log(`Options Count: ${optionsCount}`);
-          if (optionsCount <= 0) subject.dataValues.active = false;
+      // Fetch all option counts for these subjects in a single query
+      const optionCounts = await Option.findAll({
+        attributes: [
+          [Sequelize.col("Question.SubjectId"), "SubjectId"],
+          [Sequelize.fn("COUNT", Sequelize.col("Option.id")), "count"],
+        ],
+        include: [
+          {
+            model: Question,
+            attributes: [],
+            where: { SubjectId: { [Op.in]: subjectIds } },
+          },
+        ],
+        group: ["Question.SubjectId"],
+        raw: true,
+      });
 
-          console.log(subject.dataValues.active);
-          // subject.dataValues.active && subjects.push(subject.dataValues);
-          subjects.push(subject.dataValues);
-        })
-      );
+      const optionCountsMap = {};
+      optionCounts.forEach(oc => {
+        const sId = oc.SubjectId || oc["Question.SubjectId"];
+        optionCountsMap[sId] = parseInt(oc.count) || 0;
+      });
+
+      // Map active state in memory
+      for (const subject of subjectsFromDb) {
+        const questionCount = questionCountsMap[subject.id] || 0;
+        const optionsCount = optionCountsMap[subject.id] || 0;
+
+        if (questionCount <= 0) subject.dataValues.active = false;
+        if (questionCount < examSettings.questionLimit)
+          subject.dataValues.active = false;
+        if (optionsCount <= 0) subject.dataValues.active = false;
+
+        subjects.push(subject.dataValues);
+      }
     }
 
     return subjects.sort((a, b) => a.name.localeCompare(b.name));
