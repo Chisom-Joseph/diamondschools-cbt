@@ -19,17 +19,24 @@ module.exports = async (req, res) => {
   const userAnswers = req.body.answers;
   let correctCount = 0;
 
-  //   Check if answer is correct
-  await Promise.all(
-    userAnswers.map(async (userAnswer) => {
-      const currentOption = await Option.findOne({
-        where: { id: userAnswer.optionId },
-      });
+  //   Check if answer is correct in a single query
+  const optionIds = userAnswers.map(ua => ua.optionId).filter(id => id);
+  if (optionIds.length > 0) {
+    const options = await Option.findAll({
+      where: { id: optionIds },
+      attributes: ["id", "correct"],
+    });
 
-      // Check if answer is correct
-      if (currentOption && currentOption.dataValues.correct) correctCount++;
-    })
-  );
+    const correctOptionIds = new Set(
+      options.filter(o => o.correct).map(o => o.id)
+    );
+
+    userAnswers.forEach((userAnswer) => {
+      if (correctOptionIds.has(userAnswer.optionId)) {
+        correctCount++;
+      }
+    });
+  }
 
   let attemptedSubject;
   // Check if attempted subject exists
